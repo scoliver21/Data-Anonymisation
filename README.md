@@ -41,3 +41,7 @@ faker
 hashlib
 datetime
 random
+
+---
+
+## ⚙️ Libraries Used
