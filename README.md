@@ -44,15 +44,15 @@ random
 
 ```
 
-🔐 Steps in the Anonymisation Process
+## 🔐 Steps in the Anonymisation Process
 
-✅ Step 1: Drop Irrelevant Columns
-Columns like Unnamed: 0, customer_id, and current_location were removed. These were either non-essential or contained personally identifiable information (PII).
+### ✅ Step 1: Drop Irrelevant Columns
+Columns like **Unnamed: 0**, **customer_id**, and **current_location** were removed. These were either non-essential or contained personally identifiable information (PII).
 
-- Unnamed: 0 is an index column from CSV export.
-- customer_id and current_location could reveal user identity or location.
+- **Unnamed: 0** is an index column from CSV export.
+- **customer_id** and current_location could reveal user identity or location.
 
-Purpose: To reduce privacy risk and keep only relevant data for anonymisation.
+*Purpose*: To reduce privacy risk and keep only relevant data for anonymisation.
 
 ✨ Step 2: Mask username
 A custom masking function replaces characters with * to partially hide the username, preserving only the first and last characters.
