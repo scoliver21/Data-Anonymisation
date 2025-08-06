@@ -188,7 +188,7 @@ Final anonymised dataset is saved as:
 1. Clone this repository.
 2. Open **data_anonymisation.ipynb** in Jupyter Notebook or VS Code.
 3. Run each cell sequentially.
-4. The anonymised dataset will be saved as mobile_customers_cleaned.xlsx.
+4. The anonymised dataset will be saved as **mobile_customers_cleaned.xlsx**.
 
 ---
 
@@ -210,7 +210,7 @@ This project is licensed under the MIT License. See the **LICENSE** file for ful
 
 ---
 
-## 👨‍💻 Note from the Author
+## 👩‍💻 Note from the Author
 This project is based on anonymisation techniques outlined in a Forage virtual experience. All Python code was independently written by me as part of my learning in data privacy and ethical data handling.
 
 
