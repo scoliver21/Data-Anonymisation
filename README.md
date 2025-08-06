@@ -87,27 +87,91 @@ Generate fake names using the Faker library while retaining the structure of the
 | `[fake.name() for _ in range(len(df))]`   | Gets the last character of the username |
 | `df['name']`                              | This list is then assigned to the column replacing all original names with fake ones |
 
+---
 
-📧 Step 4: Mask Email Addresses
-Emails are partially masked to obscure identifying information while keeping the domain.
+### 📧 Step 4: Mask Email Addresses
+This helps protect personal information while maintaining a valid email format for analysis.
 
-📆 Step 5: Add Noise to Dates
+- The **mask_email()** function partially hides the username part of the email while keeping the domain visible (e.g., a****z@gmail.com).
+- The email is split into two parts: the name before the **@** and the domain after.
+- The name is masked by keeping the first and last characters and replacing the middle characters with asterisks just like Step 2.
+
+---
+
+### 📆 Step 5: Add Noise to Dates
 Random noise (± days) is added to date_registered and birthdate columns to protect temporal patterns.
 
-📊 Step 6: Group Age and Salary
-age and salary are grouped into bins using pandas.cut() to reduce precision and increase privacy.
+📘 Explanation of the code:
 
-🔒 Step 7: Hash Credit Card Provider and Expiry
-Apply SHA-256 hashing (shortened) to credit card provider and expiry dates for tokenisation.
+| Code                                      | Description |
+|-------------------------------------------|-------------|
+| `pd.to_datetime()`                        | Converts strings to date format |
+| `errors='coerce'`                         | Turns invalid dates into NaT |
+| `timedelta(days=...)`                     | Lets us shift dates forward or backward |
+| `random.randint(-max_days, max_days)`     | Picks a random number of days |
+| `add_noise_to_date()`                     | Adds this random shift to each date |
+| `.apply(...)`                             | Applies it to every row in the column |
+| `.dt.strftime('%-d/%-m/%Y')`              | Formats the date like 1/8/2025 |
 
-💳 Step 8: Mask Credit Card Info
-Randomize credit card numbers and security codes into pseudo values to completely anonymise them.
+---
 
-🏢 Step 9: Hash Employer and Job
-Tokenise employer and job titles with hashing to preserve structure but anonymise values.
+### 📊 Step 6: Group Age and Salary
+Age and salary are grouped into bins to reduce precision and increase privacy.
+
+📘 Explanation of the code:
+
+| Code                                      | Description |
+|-------------------------------------------|-------------|
+| `pd.cut()`                                | Groups continuous numbers into ranges or “bins” |
+| `bins1 = [...]`                           | Defines age ranges (e.g. 20–30, 30–40, etc.) |
+| `df['age'] = pd.cut(df['age'], bins1)`    | Replaces each exact age with the range it falls into |
+
+Same goes for salary using **bins2**.
+
+---
+
+### 🔒 Step 7: Hash Credit Card Provider and Expiry
+This hides sensitive data (like “Visa” or “12/26”) while keeping a consistent format.
+
+📘 Explanation of the code:
+
+| Code                                      | Description |
+|-------------------------------------------|-------------|
+| `hashlib.sha256()`                        | Turns text into a fixed, unreadable string (called a hash) |
+| `hexdigest()[:10]`                        | Keeps only the first 10 characters of that long hash (to shorten it) |
+| `str(x)`                                  | Ensures the data is a string before hashing |
+| `apply(lambda x: ...)`                    | Runs the **hash_token()** function on every row in the column |
+
+---
+
+### 💳 Step 8: Mask Credit Card Info
+Randomize credit card numbers and security codes into pseudo values to completely anonymise them and removing any real financial data.
+
+📘 Explanation of the code:
+
+| Code                                      | Description |
+|-------------------------------------------|-------------|
+| `np.random.uniform(a, b)`                 | Creates a random number between a and b |
+| `-1e18`                                   | Means -1 followed by 18 zeros (a very large number) |
+| `apply()`                                 | Runs the masking function on every value in the column |
+
+This replaces real credit card info with fake, random numbers.
+
+---
+
+### 🏢 Step 9: Hash Employer and Job
+Tokenise employer and job titles with hashing to preserve structure but anonymise values. Similar as Step 7.
 
 🏠 Step 10: Generate Fake Addresses
 Use Faker to replace both residence and address columns with synthetic values.
+
+📘 Explanation of the code:
+
+| Code                                      | Description |
+|-------------------------------------------|-------------|
+| `fake.address()`                          | Gives a full fake address |
+| `-1e18`                                   | Means -1 followed by 18 zeros (a very large number) |
+| `apply()`                                 | Runs the masking function on every value in the column |
 
 
 
