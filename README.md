@@ -162,7 +162,9 @@ This replaces real credit card info with fake, random numbers.
 ### 🏢 Step 9: Hash Employer and Job
 Tokenise employer and job titles with hashing to preserve structure but anonymise values. Similar as Step 7.
 
-🏠 Step 10: Generate Fake Addresses
+---
+
+### 🏠 Step 10: Generate Fake Addresses
 Use Faker to replace both residence and address columns with synthetic values.
 
 📘 Explanation of the code:
@@ -170,8 +172,40 @@ Use Faker to replace both residence and address columns with synthetic values.
 | Code                                      | Description |
 |-------------------------------------------|-------------|
 | `fake.address()`                          | Gives a full fake address |
-| `-1e18`                                   | Means -1 followed by 18 zeros (a very large number) |
-| `apply()`                                 | Runs the masking function on every value in the column |
+| `replace("\n", " ")`                      | Makes sure the address stays on one line |
+| `for _ in range(len(df))`                 | Repeats this for every row in the DataFrame |
+
+---
+
+## 💾 Saving the Output
+The cleaned and anonymised dataset is saved in a new Excel file.
+
+---
+
+## 🚀 How to Run the Code
+
+1. Clone this repository.
+2. Open data_anonymisation.ipynb in Jupyter Notebook or VS Code.
+3. Run each cell sequentially.
+4. The anonymised dataset will be saved as mobile_customers_cleaned.xlsx.
+
+---
+
+## 📚 Disclaimer
+This project is a learning exercise based on a public virtual internship from Forage. All data used is fictional and not linked to real individuals.
+
+---
+
+## 📃 License
+This project is licensed under the MIT License. See the LICENSE file for more information.
+
+---
+
+## 🤝 Acknowledgements
+
+- Forage
+- Commonwealth Bank Virtual Experience
+- Python open-source community 💙
 
 
 
