@@ -54,8 +54,25 @@ Columns like **Unnamed: 0**, **customer_id**, and **current_location** were remo
 
 *Purpose*: To reduce privacy risk and keep only relevant data for anonymisation.
 
-✨ Step 2: Mask username
+
+
+### ✨ Step 2: Mask username
 A custom masking function replaces characters with * to partially hide the username, preserving only the first and last characters.
+
+🔍 Explanation of the code:
+
+| File                          | Description |
+|-------------------------------|-------------|
+| `len(name)`                   | Checks how many characters are in the username |
+| `if len(name) <= 2`           | If the name has 1 or 2 letters, it’s fully masked with * |
+| `name[0]`                     | Gets the first character of the username |
+| `name[-1]`                    | Gets the last character of the username |
+| `'*' * (len(name) - 2)`       | Creates a string of asterisks to replace the middle characters |
+| `.apply(mask_name)`           | Applies this function to every row in the username column |
+
+Example: *For a 5-letter name like "susan", it generates "***". *The final result joins the first letter + asterisks + last letter (e.g., "susan" → "s***n").
+
+
 
 👤 Step 3: Replace Names with Fake Data
 Generate fake names using the Faker library while retaining the structure of the dataset.
