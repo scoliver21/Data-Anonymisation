@@ -54,14 +54,14 @@ Columns like **Unnamed: 0**, **customer_id**, and **current_location** were remo
 
 *Purpose*: To reduce privacy risk and keep only relevant data for anonymisation.
 
-
+---
 
 ### ✨ Step 2: Mask username
 A custom masking function replaces characters with * to partially hide the username, preserving only the first and last characters.
 
 🔍 Explanation of the code:
 
-| File                          | Description |
+| Code                          | Description |
 |-------------------------------|-------------|
 | `len(name)`                   | Checks how many characters are in the username |
 | `if len(name) <= 2`           | If the name has 1 or 2 letters, it’s fully masked with * |
@@ -72,10 +72,21 @@ A custom masking function replaces characters with * to partially hide the usern
 
 Example: *For a 5-letter name like "susan", it generates "***". *The final result joins the first letter + asterisks + last letter (e.g., "susan" → "s***n").
 
+---
 
-
-👤 Step 3: Replace Names with Fake Data
+### 👤 Step 3: Replace Names with Fake Data
 Generate fake names using the Faker library while retaining the structure of the dataset.
+
+🔍 Explanation of the code:
+
+| Code                                      | Description |
+|-------------------------------------------|-------------|
+| `Faker()`                                 | A tool that generates fake data like names, addresses, email, etc |
+| `Faker.seed(42)`                          | Generates the same set of fake names every time when run the code |
+| `range(len(df))`                          | Creates a loop equal to the number of rows in the DataFrame |
+| `[fake.name() for _ in range(len(df))]`   | Gets the last character of the username |
+| `df['name']`                              | This list is then assigned to the column replacing all original names with fake ones |
+
 
 📧 Step 4: Mask Email Addresses
 Emails are partially masked to obscure identifying information while keeping the domain.
