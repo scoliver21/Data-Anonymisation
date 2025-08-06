@@ -1,8 +1,8 @@
 # 📁 Data Anonymisation Project
 
-**A beginner-friendly data anonymisation project using Python, pandas, and Faker.**
+**A beginner-friendly project for anonymising personal data using Python, pandas, and Faker.**
 
-This project simulates a real-world data privacy task based on the [Commonwealth Bank Virtual Experience on Forage](https://www.theforage.com/). The dataset used is entirely fictional and strictly for educational purposes.
+This project simulates a real-world data privacy task based on the [Commonwealth Bank Virtual Experience on Forage](https://www.theforage.com/). This project was implemented using Python. The dataset used is entirely fictional and strictly for educational purposes.
 
 ---
 
@@ -25,9 +25,9 @@ The goal of this project is to anonymise personal data using common data privacy
 |-------------------------------|-------------|
 | `original_dataset.xlsx`       | Original (fictional) dataset |
 | `mobile_customers_cleaned.xlsx` | Anonymised version of the dataset |
-| `data_anonymisation.ipynb`    | Jupyter Notebook with all transformation steps |
+| `data_anonymisation.ipynb`    | Jupyter Notebook with all the steps |
 | `README.md`                   | This file |
-| `.gitignore`                  | Git ignore rules |
+| `.gitignore`                  | Files ignored by Git |
 | `LICENSE`                     | License for usage/sharing |
 
 ---
@@ -49,42 +49,43 @@ random
 ### ✅ Step 1: Drop Irrelevant Columns
 Columns like **Unnamed: 0**, **customer_id**, and **current_location** were removed. These were either non-essential or contained personally identifiable information (PII).
 
-- **Unnamed: 0** is an index column from CSV export.
+- **Unnamed: 0** is just an index column.
 - **customer_id** and current_location could reveal user identity or location.
 
-*Purpose*: To reduce privacy risk and keep only relevant data for anonymisation.
+*Purpose*: To reduce privacy risk and keep only relevant data.
 
 ---
 
 ### ✨ Step 2: Mask username
-A custom masking function replaces characters with * to partially hide the username, preserving only the first and last characters.
+A masking function hides all characters except the first and last in the username column.
 
 🔍 Explanation of the code:
 
 | Code                          | Description |
 |-------------------------------|-------------|
-| `len(name)`                   | Checks how many characters are in the username |
+| `len(name)`                   | Gets the number of characters |
 | `if len(name) <= 2`           | If the name has 1 or 2 letters, it’s fully masked with * |
-| `name[0]`                     | Gets the first character of the username |
-| `name[-1]`                    | Gets the last character of the username |
+| `name[0]`                     | Gets the first character |
+| `name[-1]`                    | Gets the last character |
 | `'*' * (len(name) - 2)`       | Creates a string of asterisks to replace the middle characters |
-| `.apply(mask_name)`           | Applies this function to every row in the username column |
+| `.apply(mask_name)`           | Applies this to each row |
 
 Example: *For a 5-letter name like "susan", it generates "***". *The final result joins the first letter + asterisks + last letter (e.g., "susan" → "s***n").
 
 ---
 
 ### 👤 Step 3: Replace Names with Fake Data
-Generate fake names using the Faker library while retaining the structure of the dataset.
+Generate fake names using the **Faker** library while retaining the structure of the dataset.
 
 🔍 Explanation of the code:
 
 | Code                                      | Description |
 |-------------------------------------------|-------------|
-| `Faker()`                                 | A tool that generates fake data like names, addresses, email, etc |
-| `Faker.seed(42)`                          | Generates the same set of fake names every time when run the code |
+| `Faker()`                                 | Generates fake data |
+| `Faker.seed(42)`                          | Makes results repeatable |
 | `range(len(df))`                          | Creates a loop equal to the number of rows in the DataFrame |
-| `[fake.name() for _ in range(len(df))]`   | Gets the last character of the username |
+| `[fake.name()`                            | Generates a fake name |
+| `for _ in range(len(df))]`   | Repeats this for each row |
 | `df['name']`                              | This list is then assigned to the column replacing all original names with fake ones |
 
 ---
@@ -106,11 +107,11 @@ Random noise (± days) is added to date_registered and birthdate columns to prot
 | Code                                      | Description |
 |-------------------------------------------|-------------|
 | `pd.to_datetime()`                        | Converts strings to date format |
-| `errors='coerce'`                         | Turns invalid dates into NaT |
+| `errors='coerce'`                         | Skips invalid dates |
 | `timedelta(days=...)`                     | Lets us shift dates forward or backward |
-| `random.randint(-max_days, max_days)`     | Picks a random number of days |
+| `random.randint(-max_days, max_days)`     | Picks random days |
 | `add_noise_to_date()`                     | Adds this random shift to each date |
-| `.apply(...)`                             | Applies it to every row in the column |
+| `.apply(...)`                             | Does this for every row |
 | `.dt.strftime('%-d/%-m/%Y')`              | Formats the date like 1/8/2025 |
 
 ---
@@ -123,8 +124,8 @@ Age and salary are grouped into bins to reduce precision and increase privacy.
 | Code                                      | Description |
 |-------------------------------------------|-------------|
 | `pd.cut()`                                | Groups continuous numbers into ranges or “bins” |
-| `bins1 = [...]`                           | Defines age ranges (e.g. 20–30, 30–40, etc.) |
-| `df['age'] = pd.cut(df['age'], bins1)`    | Replaces each exact age with the range it falls into |
+| `bins1 = [...]`                           | Defines the ranges (e.g. 20–30, 30–40, etc.) |
+| `df['age'] = pd.cut(df['age'], bins1)`    | Replaces exact age with the range it fits |
 
 Same goes for salary using **bins2**.
 
@@ -138,7 +139,7 @@ This hides sensitive data (like “Visa” or “12/26”) while keeping a consi
 | Code                                      | Description |
 |-------------------------------------------|-------------|
 | `hashlib.sha256()`                        | Turns text into a fixed, unreadable string (called a hash) |
-| `hexdigest()[:10]`                        | Keeps only the first 10 characters of that long hash (to shorten it) |
+| `hexdigest()[:10]`                        | Keeps only first 10 characters (for shorter output) |
 | `str(x)`                                  | Ensures the data is a string before hashing |
 | `apply(lambda x: ...)`                    | Runs the **hash_token()** function on every row in the column |
 
@@ -153,7 +154,6 @@ Randomize credit card numbers and security codes into pseudo values to completel
 |-------------------------------------------|-------------|
 | `np.random.uniform(a, b)`                 | Creates a random number between a and b |
 | `-1e18`                                   | Means -1 followed by 18 zeros (a very large number) |
-| `apply()`                                 | Runs the masking function on every value in the column |
 
 This replaces real credit card info with fake, random numbers.
 
@@ -171,21 +171,22 @@ Use Faker to replace both residence and address columns with synthetic values. S
 
 | Code                                      | Description |
 |-------------------------------------------|-------------|
-| `fake.address()`                          | Gives a full fake address |
-| `replace("\n", " ")`                      | Makes sure the address stays on one line |
-| `for _ in range(len(df))`                 | Repeats this for every row in the DataFrame |
+| `fake.address()`                          | Creates a full fake address |
+| `replace("\n", " ")`                      | Puts the address on one line |
+| `for _ in range(len(df))`                 | Repeats for every row |
 
 ---
 
 ## 💾 Saving the Output
-The cleaned and anonymised dataset is saved in a new Excel file.
+Final anonymised dataset is saved as:
+**mobile_customers_cleaned.xlsx**
 
 ---
 
 ## 🚀 How to Run the Code
 
 1. Clone this repository.
-2. Open data_anonymisation.ipynb in Jupyter Notebook or VS Code.
+2. Open **data_anonymisation.ipynb** in Jupyter Notebook or VS Code.
 3. Run each cell sequentially.
 4. The anonymised dataset will be saved as mobile_customers_cleaned.xlsx.
 
@@ -197,7 +198,7 @@ This project is a learning exercise based on a public virtual internship from Fo
 ---
 
 ## 📃 License
-This project is licensed under the MIT License. See the LICENSE file for more information.
+This project is licensed under the MIT License. See the **LICENSE** file for full terms.
 
 ---
 
@@ -207,5 +208,9 @@ This project is licensed under the MIT License. See the LICENSE file for more in
 - Commonwealth Bank Virtual Experience
 - Python open-source community 💙
 
+---
+
+## 👨‍💻 Note from the Author
+This project is based on anonymisation techniques outlined in a Forage virtual experience. All Python code was independently written by me as part of my learning in data privacy and ethical data handling.
 
 
