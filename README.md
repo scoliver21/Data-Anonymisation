@@ -101,7 +101,7 @@ This helps protect personal information while maintaining a valid email format f
 ### 📆 Step 5: Add Noise to Dates
 Random noise (± days) is added to date_registered and birthdate columns to protect temporal patterns.
 
-📘 Explanation of the code:
+🔍 Explanation of the code:
 
 | Code                                      | Description |
 |-------------------------------------------|-------------|
@@ -165,7 +165,7 @@ Tokenise employer and job titles with hashing to preserve structure but anonymis
 ---
 
 ### 🏠 Step 10: Generate Fake Addresses
-Use Faker to replace both residence and address columns with synthetic values.
+Use Faker to replace both residence and address columns with synthetic values. Similar as Step 3.
 
 📘 Explanation of the code:
 
